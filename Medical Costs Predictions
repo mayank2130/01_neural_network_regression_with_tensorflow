@@ -1,0 +1,51 @@
+# Import required libraries
+import tensorflow as tf
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read in the insurance dataset
+insurance = pd.read_csv("https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv")
+
+# Check out the insurance dataset
+insurance.head()
+
+# Turn all categories into numbers
+insurance_one_hot = pd.get_dummies(insurance)
+insurance_one_hot.head() # view the converted columns
+
+# Create X & y values
+X = insurance_one_hot.drop("charges", axis=1)
+y = insurance_one_hot["charges"]
+
+# View features
+X.head()
+
+# Create training and test sets
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, 
+                                                    y, 
+                                                    test_size=0.2, 
+                                                    random_state=42) # set random state for reproducible splits
+
+
+# Set random seed
+tf.random.set_seed(42)
+
+# Create a model 
+insurance_model = tf.keras.Sequential([
+  tf.keras.layers.Dense(1),
+  tf.keras.layers.Dense(1)
+])
+
+# Compile the model
+insurance_model.compile(loss=tf.keras.losses.mae,
+                        optimizer=tf.keras.optimizers.Adam(),
+                        metrics=['mae'])
+
+# Fit the model
+history = insurance_model_1.fit(tf.expand_dims(X_train_normal, axis=-1), y_train, epochs=100)
+
+# To visualize the loss curve
+pd.DataFrame(history.history).plot()
+plt.ylabel("loss")
+plt.xlabel("epochs")
